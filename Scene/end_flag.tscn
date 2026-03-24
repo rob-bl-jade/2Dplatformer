@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://blwv0nme14qlt"]
+
+[ext_resource type="Script" uid="uid://bs8bw36as8dw0" path="res://Scripts/end_flag.gd" id="1_anh5g"]
+[ext_resource type="Texture2D" uid="uid://4032ma0188b3" path="res://Sprites/Objects/tile_0112.png" id="2_hj6fa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j7kpp"]
+radius = 7.071068
+
+[sub_resource type="GDScript" id="GDScript_bjebc"]
+script/source = "extends CollisionShape2D
+"
+
+[node name="EndFlag" type="Area2D"]
+script = ExtResource("1_anh5g")
+
+[node name="sprite" type="Sprite2D" parent="."]
+position = Vector2(57, -9)
+texture = ExtResource("2_hj6fa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(56, -10)
+shape = SubResource("CircleShape2D_j7kpp")
+script = SubResource("GDScript_bjebc")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
