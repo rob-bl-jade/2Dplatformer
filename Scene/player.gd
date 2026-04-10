@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal OnUpdateHealth (health: int)
+signal OnUpdateScore (score: int)
 @export var move_speed : float =100
 @export var acceleration :  float = 50
 @export var braking :float =  20 
@@ -10,8 +12,14 @@ extends CharacterBody2D
 
 var move_input  : float
 
+
 @onready var sprite: Sprite2D = $sprite
 @onready var anim : AnimationPlayer = $AnimationPlayer
+@onready var audio : AudioStreamPlayer =$AudioStreamPlayer
+
+var take_dmage_sfx : AudioStream = preload("res://Audio/take_damage.wav")
+var coin_sfx : AudioStream = preload("res://Audio/coin.wav")
+
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta 
@@ -32,12 +40,17 @@ func _physics_process(delta):
 	move_and_slide()
 	
 	
+
+
+
 func _process(delta):
 	if velocity.x != 0:
 		sprite.flip_h = velocity.x > 0
-
+	if global_position.y > 200:
+		game_over()
 
 	_manage_animation()
+
 
 func _manage_animation ():
 	if not is_on_floor():
@@ -46,10 +59,12 @@ func _manage_animation ():
 		anim.play("move")
 	else:
 		anim.play("idle")
-
 func take_damage (amount : int):
 	health-= amount
+	play_sound(take_dmage_sfx)
 	
+	OnUpdateHealth.emit(health)
+	_damage_flash()
 	if health <= 0:
 		call_deferred("game_over")
 
@@ -57,5 +72,17 @@ func game_over ():
 	get_tree() .change_scene_to_file("res://level_1.tscn")
 
 func increase_score (amount : int):
+	play_sound(coin_sfx)
 	playerstats.score += amount
-	print(playerstats.score)
+	OnUpdateScore.emit(playerstats.score)
+
+
+
+
+func play_sound (sound : AudioStream):
+	audio.stream = sound
+	audio.play()
+func _damage_flash () :
+	sprite.modulate = Color.RED
+	await get_tree().create_timer(0.05).timeout
+	sprite.modulate = Color.WHITE

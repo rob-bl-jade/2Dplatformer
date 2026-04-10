@@ -22,5 +22,5 @@ func _on_body_entered(body: Node2D) -> void:
 	if not body.is_in_group("player"):
 		return
 	
-	body. increase_score(1)
+	body.increase_score(1)
 	queue_free()
