@@ -46,6 +46,7 @@ func _physics_process(delta):
 func _process(delta):
 	if velocity.x != 0:
 		sprite.flip_h = velocity.x > 0
+	
 	if global_position.y > 200:
 		game_over()
 
@@ -54,13 +55,16 @@ func _process(delta):
 
 func _manage_animation ():
 	if not is_on_floor():
-		anim.play("jump")
+		anim.play("Jump")
 	elif move_input != 0:
 		anim.play("move")
 	else:
 		anim.play("idle")
+	
+	
 func take_damage (amount : int):
 	health-= amount
+	OnUpdateHealth.emit(health)
 	play_sound(take_dmage_sfx)
 	
 	OnUpdateHealth.emit(health)
