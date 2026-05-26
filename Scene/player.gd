@@ -12,7 +12,12 @@ signal OnUpdateScore (score: int)
 @export var health : int = 3
 
 var move_input  : float
+<<<<<<< HEAD
 var has_double_jump : bool = false 
+=======
+var has_double_jumped : bool = false
+
+>>>>>>> cada9c0a66c993efe310c2339f47864dc15b4ac1
 
 @onready var sprite: Sprite2D = $sprite
 @onready var anim : AnimationPlayer = $AnimationPlayer
@@ -37,6 +42,7 @@ func _physics_process(delta):
 		velocity.x = lerp(velocity.x, 0.0, braking * delta)
 	
 	#jumping 
+<<<<<<< HEAD
 		if Input.is_action_just_pressed("jump"):
 			pass
 	if is_on_floor():
@@ -45,14 +51,22 @@ func _physics_process(delta):
 		velocity.y = -jump_force
 		has_double_jump = true 
 		move_and_slide()
+=======
+	if Input.is_action_just_pressed('jump'):
+		if is_on_floor():
+			velocity.y = -jump_force
+		elif not has_double_jumped:
+			velocity.y =-jump_force
+			has_double_jumped = true
+	move_and_slide()
+>>>>>>> cada9c0a66c993efe310c2339f47864dc15b4ac1
 	
 	
-
-
 
 func _process(delta):
 	if velocity.x != 0:
 		sprite.flip_h = velocity.x > 0
+	
 	if global_position.y > 200:
 		game_over()
 
@@ -61,22 +75,27 @@ func _process(delta):
 
 func _manage_animation ():
 	if not is_on_floor():
-		anim.play("jump")
+		anim.play("Jump")
 	elif move_input != 0:
 		anim.play("move")
 	else:
 		anim.play("idle")
+	
+	
 func take_damage (amount : int):
-	health-= amount
+	health -= amount
+	print(health)
+	OnUpdateHealth.emit(health)
 	play_sound(take_dmage_sfx)
 	
 	OnUpdateHealth.emit(health)
 	_damage_flash()
 	if health <= 0:
+		print('work')
 		call_deferred("game_over")
 
 func game_over ():
-	get_tree() .change_scene_to_file("res://level_1.tscn")
+	get_tree().change_scene_to_file("res://menu.tscn")
 
 func increase_score (amount : int):
 	play_sound(coin_sfx)
@@ -93,3 +112,7 @@ func _damage_flash () :
 	sprite.modulate = Color.RED
 	await get_tree().create_timer(0.05).timeout
 	sprite.modulate = Color.WHITE
+
+
+func _on_on_update_health(health: int) -> void:
+	pass # Replace with function body.
