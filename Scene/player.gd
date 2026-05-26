@@ -36,7 +36,7 @@ func _physics_process(delta):
 		velocity.x = lerp(velocity.x, 0.0, braking * delta)
 	
 	#jumping 
-	if Input.is_action_just_pressed('jump'):
+	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			velocity.y = -jump_force
 		elif not has_double_jumped:
