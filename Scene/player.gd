@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 signal OnUpdateHealth (health: int)
 signal OnUpdateScore (score: int)
+
 @export var move_speed : float =100
 @export var acceleration :  float = 50
 @export var braking :float =  20 
@@ -11,7 +12,7 @@ signal OnUpdateScore (score: int)
 @export var health : int = 3
 
 var move_input  : float
-
+var has_double_jump : bool = false 
 
 @onready var sprite: Sprite2D = $sprite
 @onready var anim : AnimationPlayer = $AnimationPlayer
@@ -23,7 +24,8 @@ var coin_sfx : AudioStream = preload("res://Audio/coin.wav")
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta 
-	
+	else: 
+		has_double_jump = false 
 	
 	move_input = Input.get_axis("move_left", "move_right")
 	
@@ -35,9 +37,14 @@ func _physics_process(delta):
 		velocity.x = lerp(velocity.x, 0.0, braking * delta)
 	
 	#jumping 
-	if Input.is_action_pressed(" jump") and is_on_floor():
+		if Input.is_action_just_pressed("jump"):
+			pass
+	if is_on_floor():
 		velocity.y = -jump_force
-	move_and_slide()
+	elif not has_double_jump:
+		velocity.y = -jump_force
+		has_double_jump = true 
+		move_and_slide()
 	
 	
 
