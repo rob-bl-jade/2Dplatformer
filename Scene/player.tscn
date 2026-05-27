@@ -15,8 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://6yb46np7iruc" path="res://Sprites/Characters/IdleAnimation4.png" id="9_eqmt2"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y8w33"]
-radius = 1.0
-height = 2.0
+radius = 22.0
+height = 48.0
 
 [sub_resource type="Animation" id="Animation_58ae2"]
 resource_name = "Jump"
@@ -96,13 +96,16 @@ font_size = 38
 shadow_size = 6
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+position = Vector2(1, 7)
 script = ExtResource("1_y8w33")
 
 [node name="sprite" type="Sprite2D" parent="."]
-scale = Vector2(0.0037614622, 0.0021078119)
+position = Vector2(-1, -9)
+scale = Vector2(0.08332068, 0.053972114)
 texture = ExtResource("1_kelma")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -9)
 scale = Vector2(0.5, 0.5)
 shape = SubResource("CapsuleShape2D_y8w33")
 
